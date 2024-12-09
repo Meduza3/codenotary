@@ -64,4 +64,5 @@ func main() {
 		}(node)
 	}
 
+	wg.Wait()
 }
