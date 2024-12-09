@@ -1,0 +1,844 @@
+{
+  "packageKey": {
+      "system": "GO",
+      "name": "github.com/cli/cli/v2"
+  },
+  "versions": [
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.1.0"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.10.0"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.10.1"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.11.0"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.11.1"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.11.2"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.11.3"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.12.0"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.12.1"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.13.0"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.14.0"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.14.1"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.14.2"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.14.3"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.14.4"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.14.5"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.14.6"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.14.7"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.15.0"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.16.0"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.16.1"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.17.0"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.18.0"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.18.1"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.19.0"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.2.0"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.2.1-0.20211122114001-a3940020f938"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.20.0"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.20.1"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.20.2"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.21.0"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.21.1"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.21.2"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.22.0"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.22.1"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.23.0"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.24.0"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.24.1"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.24.2"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.24.3"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.25.0"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.25.1"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.26.0"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.26.1"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.27.0"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.28.0"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.29.0"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.3.0"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.30.0"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.31.0"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.32.0"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.32.1"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.33.0"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.34.0"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.35.0"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.36.0"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.37.0"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.38.0"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.38.1-0.20231106075903-ccf45cc7c6ca"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.39.0"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.39.1"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.39.2"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.4.0"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.40.0"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.40.1"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.41.0"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.42.0"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.42.1"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.43.0"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.43.1"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.44.0"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.44.1"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.45.0"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.46.0"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.47.0"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.48.0"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.49.0"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.49.1"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.49.2"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.5.0"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.5.1"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.5.2"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.50.0"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.51.0"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.52.0"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.53.0"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.54.0"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.55.0"
+          },
+          "publishedAt": "2024-08-20T18:16:15Z",
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.56.0"
+          },
+          "publishedAt": "2024-09-09T12:27:19Z",
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.57.0"
+          },
+          "publishedAt": "2024-09-16T15:37:53Z",
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.58.0"
+          },
+          "publishedAt": "2024-10-01T21:01:11Z",
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.59.0"
+          },
+          "publishedAt": "2024-10-16T12:30:22Z",
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.6.0"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.60.0"
+          },
+          "publishedAt": "2024-10-24T17:42:11Z",
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.60.1"
+          },
+          "publishedAt": "2024-10-25T17:25:10Z",
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.61.0"
+          },
+          "publishedAt": "2024-11-07T13:22:24Z",
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.62.0"
+          },
+          "publishedAt": "2024-11-14T16:24:01Z",
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.63.0"
+          },
+          "publishedAt": "2024-11-27T21:20:28Z",
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.63.1"
+          },
+          "publishedAt": "2024-12-03T23:39:58Z",
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.63.2"
+          },
+          "publishedAt": "2024-12-05T18:29:52Z",
+          "isDefault": true
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.7.0"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.8.0"
+          },
+          "isDefault": false
+      },
+      {
+          "versionKey": {
+              "system": "GO",
+              "name": "github.com/cli/cli/v2",
+              "version": "v2.9.0"
+          },
+          "isDefault": false
+      }
+  ]
+}
