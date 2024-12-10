@@ -8,7 +8,11 @@ import (
 	"strings"
 )
 
-func InsertDependencyGraph(db *sql.DB, projectID string, graph deps.DependencyGraph) error {
+func InsertDependencyGraph(db *sql.DB, projectID string, graph *deps.DependencyGraph) error {
+	if graph == nil {
+		return fmt.Errorf("nil graph")
+	}
+
 	// Insert nodes into dependency_nodes
 	for idx, node := range graph.Nodes {
 		errors := strings.Join(node.Errors, ";") // Combine errors into a single string
@@ -22,7 +26,7 @@ func InsertDependencyGraph(db *sql.DB, projectID string, graph deps.DependencyGr
 			node.Bundled, node.Relation, errors,
 		}
 
-		log.Printf("Executing query: %s with args: %v", query, args)
+		//log.Printf("Executing query: %s with args: %v", query, args)
 
 		_, err := db.Exec(query, args...)
 		if err != nil {
@@ -41,7 +45,7 @@ func InsertDependencyGraph(db *sql.DB, projectID string, graph deps.DependencyGr
 			projectID, edge.FromNode, edge.ToNode, edge.Requirement,
 		}
 
-		log.Printf("Executing query: %s with args: %v", query, args)
+		//log.Printf("Executing query: %s with args: %v", query, args)
 
 		_, err := db.Exec(query, args...)
 		if err != nil {

@@ -6,7 +6,6 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
-	"sync"
 
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -36,33 +35,24 @@ func main() {
 	}
 	fmt.Println(project.Description)
 
-	sqlite.InsertProject(db, *project)
+	sqlite.InsertProject(db, project)
 
 	dependencies, err := client.GetDependencies(name)
 	if err != nil {
 		log.Fatalf("Failed it all at dependencies! %v", err)
 	}
 
-	sqlite.InsertDependencyGraph(db, name, *dependencies)
+	// sqlite.InsertDependencyGraph(db, name, dependencies)
 
-	var wg sync.WaitGroup
-
-	for _, node := range dependencies.Nodes {
-		wg.Add(1)
-		go func(node deps.Node) {
-			defer wg.Done()
-			if node.Relation == "SELF" {
-				return
-			}
-			project, err := client.GetProject(node.VersionKey.Name)
-			if err != nil {
-				log.Fatalf("Failed it all! %v", err)
-			}
-			sqlite.InsertProject(db, *project)
-			deps, err := client.GetDependencies(node.VersionKey.Name)
-			sqlite.InsertDependencyGraph(db, node.VersionKey.Name, *deps)
-		}(node)
+	projects, err := client.GetAllProjectsFromGraph(dependencies)
+	if err != nil {
+		fmt.Println(err)
 	}
 
-	wg.Wait()
+	err = sqlite.InsertProjects(db, projects)
+	if err != nil {
+		fmt.Println(err)
+	} else {
+		fmt.Println("Finished inserting all projects at once")
+	}
 }

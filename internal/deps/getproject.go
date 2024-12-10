@@ -6,6 +6,7 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+	"sync"
 )
 
 func (c *client) GetProject(projectKey string) (*Project, error) {
@@ -56,6 +57,48 @@ func (c *client) GetProjectAndAllDependencies(projectKey string) (*result, error
 	}
 
 	return nil, nil
+}
+
+func (c *client) GetAllProjectsFromGraph(graph *DependencyGraph) ([]*Project, error) {
+	var wg sync.WaitGroup
+	type ProjectResult struct {
+		Project *Project
+		Err     error
+	}
+	results := make(chan ProjectResult, len(graph.Nodes))
+	for _, node := range graph.Nodes {
+		wg.Add(1)
+		go func(node Node) {
+			defer wg.Done()
+			if node.Relation == "SELF" {
+				results <- ProjectResult{Project: nil, Err: nil}
+				return
+			}
+			project, err := c.GetProject(node.VersionKey.Name)
+			if err != nil {
+				err = fmt.Errorf("failure getting project %q: %w", node.VersionKey.Name, err)
+			}
+			results <- ProjectResult{Project: project, Err: err}
+		}(node)
+	}
+	go func() {
+		wg.Wait()
+		close(results)
+	}()
+	var projects []*Project
+	var errs []error
+	for res := range results {
+		if res.Err != nil {
+			errs = append(errs, res.Err)
+		} else if res.Project != nil {
+			projects = append(projects, res.Project)
+		}
+	}
+	var err error
+	if len(errs) > 0 {
+		err = fmt.Errorf("multiple errors: %v", errs)
+	}
+	return projects, err
 }
 
 type result struct{}
