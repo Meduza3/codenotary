@@ -1,14 +1,14 @@
 package sqlite
 
 import (
-	"codenotary/internal/deps"
+	"codenotary/internal/models"
 	"database/sql"
 	"fmt"
 	"log"
 	"strings"
 )
 
-func InsertDependencyGraph(db *sql.DB, projectID string, graph *deps.DependencyGraph) error {
+func InsertDependencyGraph(db *sql.DB, projectID string, graph *models.DependencyGraph) error {
 	if graph == nil {
 		return fmt.Errorf("nil graph")
 	}

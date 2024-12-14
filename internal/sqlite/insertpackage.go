@@ -1,13 +1,13 @@
 package sqlite
 
 import (
-	"codenotary/internal/deps"
+	"codenotary/internal/models"
 	"database/sql"
 	"fmt"
 )
 
 // Insert or update package and its versions
-func StorePackageVersions(db *sql.DB, pv *deps.PackageVersions) error {
+func StorePackageVersions(db *sql.DB, pv *models.PackageVersions) error {
 	// Insert or ignore into packages table
 	_, err := db.Exec(`
 			INSERT OR IGNORE INTO packages (system, name) VALUES (?, ?)`,

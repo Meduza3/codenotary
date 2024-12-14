@@ -1,7 +1,6 @@
 package main
 
 import (
-	"codenotary/api"
 	"codenotary/internal"
 	"codenotary/internal/deps"
 	"codenotary/internal/sqlite"
@@ -21,10 +20,14 @@ func main() {
 	sqlite.Create(internal.Db)
 	internal.Client = deps.NewClient(internal.Db)
 	mux := http.NewServeMux()
-	mux.HandleFunc("/dependency/", api.HandleGetDependencies)
+	mux.HandleFunc("/dependency/", HandleGetDependencies)
+
+	// Start the HTTP server
 	port := "8080"
+	log.Printf("Server is running on port %s", port)
 	err = http.ListenAndServe(":"+port, mux)
 	if err != nil {
-		panic(err)
+		log.Fatalf("Server failed to start: %v", err)
 	}
+
 }

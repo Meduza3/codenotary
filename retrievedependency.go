@@ -1,7 +1,9 @@
-package api
+package main
 
 import (
 	"codenotary/internal"
+	"codenotary/internal/models"
+	"codenotary/internal/sqlite"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -25,54 +27,78 @@ func HandleGetDependencies(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Print the project name to the console
 	fmt.Printf("Received GET /dependency for project: %s\n", projectName)
 
+	//store it in DB
+	project, err := internal.Client.GetProject(projectName)
+	if err != nil {
+		//handle error!
+	}
+	err = sqlite.InsertProject(internal.Db, project)
+	if err != nil {
+		//handle error!
+	}
+
 	// Retrieve the dependency graph
-	fmt.Println("Fetching dependency graph...")
+	fmt.Print("Fetching dependency graph...")
 	dependencyGraph, err := internal.Client.GetDependencies(projectName)
 	if err != nil {
 		http.Error(w, "Failed to fetch dependencies", http.StatusInternalServerError)
 		fmt.Printf("Error fetching dependency graph: %v\n", err)
 		return
 	}
-	fmt.Printf("Dependency Graph: %v\n", dependencyGraph)
-
 	// Retrieve all related projects from the dependency graph
-	fmt.Println("Fetching all projects from graph...")
-	dependenciesProjects, err := internal.Client.GetAllProjectsFromGraph(dependencyGraph)
+	dependenciesProjects, skipped, err := internal.Client.GetAllProjectsFromGraph(dependencyGraph)
 	if err != nil {
 		fmt.Printf("Error fetching related projects: %v\n", err)
 	}
-	fmt.Printf("Fetched Projects: %v\n", dependenciesProjects)
+
+	for _, skippedProject := range skipped {
+		proj := emptyProjectFromName(skippedProject)
+		dependenciesProjects = append(dependenciesProjects, &proj)
+	}
 
 	// Prepare the structured JSON response
 	type Dependency struct {
-		ID    string  `json:"id"`
-		Score float64 `json:"score"`
+		ID          string         `json:"id"`
+		Score       float64        `json:"score"`
+		CheckScores map[string]int `json:"check_scores,omitempty"`
 	}
 
+	mainScores, err := sqlite.GetScoresByProjectID(internal.Db, projectName)
+	if err != nil {
+		//handle error!
+	}
 	response := struct {
-		Message      string       `json:"message"`
-		ProjectName  string       `json:"project_name"`
-		Dependencies []Dependency `json:"dependencies"`
+		MainScores   map[string]int `json:"main_scores"`
+		Message      string         `json:"message"`
+		ProjectName  string         `json:"project_name"`
+		Dependencies []Dependency   `json:"dependencies"`
 	}{
-		Message:      "Project received successfully",
+		Message:      "No dependencies =) Hiring Marcin is a great idea",
+		MainScores:   mainScores,
 		ProjectName:  projectName,
 		Dependencies: []Dependency{},
 	}
 
 	// Populate dependencies
 	fmt.Println("Populating dependencies...")
+	sqlite.InsertProjects(internal.Db, dependenciesProjects)
 	for _, project := range dependenciesProjects {
 		if project == nil {
 			fmt.Println("Encountered nil project, skipping...")
 			continue
 		}
-		fmt.Printf("Project: ID=%s, Score=%f\n", project.ProjectKey.ID, project.Scorecard.OverallScore)
+		checkScores, err := sqlite.GetScoresByProjectID(internal.Db, project.ProjectKey.ID)
+		if err != nil {
+			fmt.Printf("Error fetching scores for project %s: %v\n", project.ProjectKey.ID, err)
+			checkScores = nil
+		}
+		//fmt.Printf("Project: ID=%s, Score=%f\n", project.ProjectKey.ID, project.Scorecard.OverallScore)
 		response.Dependencies = append(response.Dependencies, Dependency{
-			ID:    project.ProjectKey.ID,
-			Score: project.Scorecard.OverallScore,
+			ID:          project.ProjectKey.ID,
+			Score:       project.Scorecard.OverallScore,
+			CheckScores: checkScores,
 		})
 	}
 
@@ -95,4 +121,20 @@ func toJSONString(v interface{}) string {
 		return "{}"
 	}
 	return string(bytes)
+}
+
+func emptyProjectFromName(name string) models.Project {
+	// Create the project key, ID, pathname
+	// and init an empty project
+	project := models.Project{
+		ProjectKey: models.ProjectKey{
+			ID: name,
+		},
+		Scorecard: models.Scorecard{
+			OverallScore: -1,
+		},
+	}
+
+	// Return empty project
+	return project
 }

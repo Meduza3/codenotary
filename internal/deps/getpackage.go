@@ -1,6 +1,8 @@
 package deps
 
 import (
+	"codenotary/internal/models"
+	"codenotary/internal/sqlite"
 	"database/sql"
 	"encoding/json"
 	"fmt"
@@ -9,7 +11,10 @@ import (
 	"net/url"
 )
 
-func (c *Client) GetPackage(name string) (*PackageVersions, error) {
+func (c *Client) GetPackage(name string) (*models.PackageVersions, error) {
+	if pkg, err := sqlite.GetPackageVersions(c.db, name); pkg != nil && err == nil {
+		return pkg, nil
+	}
 
 	safeName := url.PathEscape(name)
 
@@ -26,7 +31,7 @@ func (c *Client) GetPackage(name string) (*PackageVersions, error) {
 		return nil, fmt.Errorf("Couldn't read all of the body")
 	}
 
-	var pkg PackageVersions
+	var pkg models.PackageVersions
 	if err := json.Unmarshal(body, &pkg); err != nil {
 		return nil, fmt.Errorf("couldn't parse JSON: %v", err)
 	}
@@ -46,25 +51,4 @@ func GetLatestVersion(db *sql.DB, system, name string) (string, error) {
 		return "", fmt.Errorf("failed to get latest version: %v", err)
 	}
 	return version, nil
-}
-
-type Version struct {
-	VersionKey VersionKey `json:"versionKey"`
-	IsDefault  bool       `json:"isDefault"` // Indicates if it's default version
-}
-
-type PackageKey struct {
-	System string `json:"system"` // (e.g. GO)
-	Name   string `json:"name"`
-}
-
-type VersionKey struct {
-	System  string `json:"system"`
-	Name    string `json:"name"`
-	Version string `json:"version"`
-}
-
-type PackageVersions struct {
-	PackageKey PackageKey `json:"packageKey"` // Unique identifier for the package
-	Versions   []Version  `json:"versions"`   // All available versions
 }

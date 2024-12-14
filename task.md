@@ -3,8 +3,8 @@ Build a Simple Application Using the deps.dev API
 Features
 
     Data Management:
-        Fetch dependencies of the repository https://github.com/cli/cli using the deps.dev API. DONE
-        Extract and store all dependencies, including their OpenSSF scores, in an SQLite database.
+        Fetch dependencies of the repository https://github.com/cli/cli using the deps.dev API. DONE =)
+        Extract and store all dependencies, including their OpenSSF scores, in an SQLite database. DONE =)
         
     Backend API:
         Develop an API to:
@@ -15,12 +15,12 @@ Features
 
     Frontend:
         Create a user-friendly interface that:
-            Displays dependencies and their OpenSSF scores dynamically.
-            Uses a chart to visualize the scores of all dependencies.
-            Allows users to search for specific dependencies by name and view their scores.
+            Displays dependencies and their OpenSSF scores dynamically. DONE =)
+            Uses a chart to visualize the scores of all dependencies.   DONE =)
+            Allows users to search for specific dependencies by name and view their scores. DONE =)
 
     Integration with deps.dev:
-        Dynamically fetch and update package information using the deps.dev API where applicable.
+        Dynamically fetch and update package information using the deps.dev API where applicable. DONE =)
 
     Documentation:
         Include a README with:

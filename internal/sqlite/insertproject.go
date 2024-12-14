@@ -1,14 +1,14 @@
 package sqlite
 
 import (
-	"codenotary/internal/deps"
+	"codenotary/internal/models"
 	"database/sql"
 	"fmt"
 	"strings"
 )
 
 // insertProject inserts the project and related checks into the database.
-func InsertProject(db *sql.DB, p *deps.Project) error {
+func InsertProject(db *sql.DB, p *models.Project) error {
 	if p == nil {
 		return fmt.Errorf("Nil project")
 	}
@@ -64,7 +64,7 @@ func InsertProject(db *sql.DB, p *deps.Project) error {
 	return nil
 }
 
-func InsertProjects(db *sql.DB, projects []*deps.Project) error {
+func InsertProjects(db *sql.DB, projects []*models.Project) error {
 	// Begin a transaction to group all inserts together.
 	tx, err := db.Begin()
 	if err != nil {

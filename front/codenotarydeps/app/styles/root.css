@@ -2,66 +2,156 @@ body {
   margin: 0;
   font-family: Arial, sans-serif;
   display: flex;
+  flex-direction: column;
   height: 100vh;
-  overflow: hidden;
 }
 
-.container {
+.check-scores {
+  margin-top: 10px;
+}
+
+.check-title {
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.check-scores-list {
   display: flex;
-  width: 100%;
+  flex-wrap: wrap; /* Allows wrapping to the next line if necessary */
+  gap: 10px; /* Adds space between items */
+  font-size: 0.9em; /* Adjusts font size for better fit */
 }
 
-.input-section {
-  flex: 1;
-  padding: 20px;
-  border-right: 1px solid #ddd;
-}
-
-.list-section {
-  flex: 3;
-  padding: 20px;
-  overflow-y: auto;
-}
-
-.rectangle {
-  height: 100px;
-  margin: 10px 0;
+.check-scores-list span {
   background-color: #f0f0f0;
-  border: 1px solid #ccc;
+  padding: 5px 5px;
+  border-radius: 4px;
+  white-space: nowrap; /* Prevents the text from wrapping within each span */
 }
 
-.scrollable-list {
-  max-height: 100%;
+.main-scores-section {
+  margin-top: 20px;
 }
 
-.input-box {
-  width: 100%;
-  padding: 10px;
-  font-size: 16px;
-  margin-bottom: 20px;
+.main-scores-list {
+  display: flex;
+  flex-wrap: wrap; /* Wrap items to the next line if needed */
+  gap: 10px; /* Space between items */
+  font-size: 0.9em;
 }
 
-.submit-button {
-  padding: 10px 20px;
-  font-size: 16px;
-}
-
-.scrollable-list {
-  max-height: 300px; /* Set a specific height */
-  overflow-y: auto; /* Enable vertical scrolling */
-  border: 1px solid #ddd; /* Optional: for better visibility */
-  padding: 10px; /* Optional: for aesthetics */
-  background-color: #f9f9f9; /* Optional: improve look */
-}
-
-.list-section {
-  width: 100%;
-  max-width: 600px; /* Optional: to constrain width */
-  margin: 0 auto; /* Center the section */
+.main-scores-list span {
+  background-color: #f0f0f0;
+  padding: 5px 10px;
+  border-radius: 4px;
+  white-space: nowrap; /* Prevent text wrapping within spans */
 }
 
 .container {
   display: flex;
   flex-direction: column;
-  gap: 20px; /* Space between sections */
+  gap: 20px;
+  padding: 20px;
+}
+
+.input-section {
+  padding: 10px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.main-section {
+  display: flex;
+  flex-direction: row; /* Side-by-side layout */
+  gap: 20px;
+  flex: 1;
+}
+
+.list-section, .graph-section {
+  flex: 1;
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 15px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+  font-size: 20px;
+  margin-bottom: 15px;
+}
+
+.scrollable-list {
+  max-height: 500px;
+  overflow-y: auto;
+  padding-right: 10px;
+}
+
+
+.graph-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  color: #666;
+  font-style: italic;
+  background-color: #f7f9fc;
+  border: 2px dashed #ccc;
+  border-radius: 8px;
+  
+  margin: 20px 0;
+}
+
+.rectangle {
+  padding: 15px;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  margin-bottom: 10px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  background-color: #f9fafb; /* Neutral background for each item */
+  transition: box-shadow 0.2s, transform 0.2s;
+  cursor: pointer;
+}
+
+.rectangle:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+}
+.rectangle-high {
+  border-left: 6px solid #2563eb; /* Blue theme for high scores */
+  border-bottom: 6px solid #2563eb;
+}
+
+.rectangle-medium {
+  border-left: 6px solid #fbbf24; /* Amber theme for medium scores */
+  border-bottom: 6px solid #fbbf24;
+}
+
+.rectangle-low {
+  border-left: 6px solid #ef4444; /* Red theme for low scores */
+  border-bottom: 6px solid #ef4444;
+}
+.score-item {
+  position: relative;
+  transition: all 0.3s ease;
+  cursor: pointer; /* Indicate interactivity */
+}
+
+.score-item .full {
+  display: none;
+}
+
+.score-item:hover .abbr {
+  display: none;
+}
+
+.score-item:hover .full {
+  display: inline;
+}
+
+.score-item .abbr,
+.score-item .full {
+  transition: opacity 0.3s ease, visibility 0.3s ease;
 }

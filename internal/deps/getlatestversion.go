@@ -1,6 +1,7 @@
 package deps
 
 import (
+	"codenotary/internal/models"
 	"fmt"
 	"os"
 	"regexp"
@@ -10,8 +11,6 @@ import (
 
 // Returns the latest default version, or the latest version in case no defaults are set.
 func (c *Client) GetLatestVersionByProjectId(projectID string) (string, error) {
-	//Check if we have it stored in our database
-
 	// If not, get it and store it for later
 	pv, err := c.GetPackage(projectID)
 	if err != nil {
@@ -33,7 +32,7 @@ func (c *Client) GetLatestVersionByProjectId(projectID string) (string, error) {
 	}
 }
 
-func latestSemVer(versions []Version) (string, error) {
+func latestSemVer(versions []models.Version) (string, error) {
 	var max string
 	var max1 int
 	var max2 int

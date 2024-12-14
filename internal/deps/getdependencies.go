@@ -1,14 +1,28 @@
 package deps
 
 import (
+	"codenotary/internal/models"
+	"codenotary/internal/sqlite"
 	"encoding/json"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"net/url"
 )
 
-func (c *Client) GetDependencies(name string) (*DependencyGraph, error) {
+// First checks the database for a dependency graph, then fetches from api
+func (c *Client) GetDependencies(name string) (*models.DependencyGraph, error) {
+	graph, err := sqlite.GetDependencyGraph(c.db, name)
+	if err != nil {
+		return nil, fmt.Errorf("error retrieving dependency graph from DB: %v", err)
+	}
+
+	if graph != nil {
+		log.Printf("Dependency graph for project %q found in the database.", name)
+		return graph, nil
+	}
+
 	safeName := url.PathEscape(name)
 
 	latestVersion, err := c.GetLatestVersionByProjectId(name)
@@ -27,29 +41,14 @@ func (c *Client) GetDependencies(name string) (*DependencyGraph, error) {
 	if err != nil {
 		return nil, fmt.Errorf("Couldn't read all of the body")
 	}
-	var project DependencyGraph
-	if err := json.Unmarshal(body, &project); err != nil {
+	var dependencyGraph models.DependencyGraph
+	if err := json.Unmarshal(body, &dependencyGraph); err != nil {
 		return nil, fmt.Errorf("error unmarshaling JSON response: %v", err)
 	}
 
-	return &project, nil
-}
-
-type Node struct {
-	VersionKey VersionKey `json:"versionKey"`
-	Bundled    bool       `json:"bundled"`
-	Relation   string     `json:"relation"`
-	Errors     []string   `json:"errors"`
-}
-
-type Edge struct {
-	FromNode    int    `json:"fromNode"`
-	ToNode      int    `json:"toNode"`
-	Requirement string `json:"requirement"`
-}
-
-type DependencyGraph struct {
-	Nodes []Node `json:"nodes"`
-	Edges []Edge `json:"edges"`
-	Error string `json:"error"`
+	err = sqlite.InsertDependencyGraph(c.db, name, &dependencyGraph)
+	if err != nil {
+		//handle error
+	}
+	return &dependencyGraph, nil
 }
