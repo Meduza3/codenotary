@@ -1,58 +1,30 @@
 package main
 
 import (
+	"codenotary/api"
+	"codenotary/internal"
 	"codenotary/internal/deps"
 	"codenotary/internal/sqlite"
 	"database/sql"
-	"fmt"
 	"log"
+	"net/http"
 
 	_ "github.com/mattn/go-sqlite3"
 )
 
-const database string = "codenotary.db"
-
 func main() {
-	db, err := sql.Open("sqlite3", database)
-	sqlite.Create(db)
-	client := deps.NewClient(db)
-
-	name := "github.com/cli/cli/v2"
-
-	packageversions, err := client.GetPackage(name)
+	var err error
+	internal.Db, err = sql.Open("sqlite3", internal.Database)
 	if err != nil {
 		log.Fatalf("Failed it all! %v", err)
 	}
-
-	err = sqlite.StorePackageVersions(db, packageversions)
+	sqlite.Create(internal.Db)
+	internal.Client = deps.NewClient(internal.Db)
+	mux := http.NewServeMux()
+	mux.HandleFunc("/dependency/", api.HandleGetDependencies)
+	port := "8080"
+	err = http.ListenAndServe(":"+port, mux)
 	if err != nil {
-		log.Fatalf("Failed it all! %v", err)
-	}
-
-	project, err := client.GetProject(name)
-	if err != nil {
-		log.Fatalf("Failed it all! %v", err)
-	}
-	fmt.Println(project.Description)
-
-	sqlite.InsertProject(db, project)
-
-	dependencies, err := client.GetDependencies(name)
-	if err != nil {
-		log.Fatalf("Failed it all at dependencies! %v", err)
-	}
-
-	// sqlite.InsertDependencyGraph(db, name, dependencies)
-
-	projects, err := client.GetAllProjectsFromGraph(dependencies)
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	err = sqlite.InsertProjects(db, projects)
-	if err != nil {
-		fmt.Println(err)
-	} else {
-		fmt.Println("Finished inserting all projects at once")
+		panic(err)
 	}
 }

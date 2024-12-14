@@ -8,7 +8,7 @@ import (
 	"net/url"
 )
 
-func (c *client) GetDependencies(name string) (*DependencyGraph, error) {
+func (c *Client) GetDependencies(name string) (*DependencyGraph, error) {
 	safeName := url.PathEscape(name)
 
 	latestVersion, err := c.GetLatestVersionByProjectId(name)
@@ -17,7 +17,7 @@ func (c *client) GetDependencies(name string) (*DependencyGraph, error) {
 	}
 	url := fmt.Sprintf("%s/systems/GO/packages/%s/versions/%s:dependencies", c.baseURL, safeName, latestVersion)
 	resp, err := http.Get(url)
-	fmt.Println(url)
+	//fmt.Println(url)
 	if err != nil {
 		return nil, fmt.Errorf("Couldn't make the get request to %q", url)
 	}

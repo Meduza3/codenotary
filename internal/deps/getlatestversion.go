@@ -9,7 +9,7 @@ import (
 )
 
 // Returns the latest default version, or the latest version in case no defaults are set.
-func (c *client) GetLatestVersionByProjectId(projectID string) (string, error) {
+func (c *Client) GetLatestVersionByProjectId(projectID string) (string, error) {
 	//Check if we have it stored in our database
 
 	// If not, get it and store it for later

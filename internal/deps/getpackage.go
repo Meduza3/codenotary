@@ -9,7 +9,7 @@ import (
 	"net/url"
 )
 
-func (c *client) GetPackage(name string) (*PackageVersions, error) {
+func (c *Client) GetPackage(name string) (*PackageVersions, error) {
 
 	safeName := url.PathEscape(name)
 

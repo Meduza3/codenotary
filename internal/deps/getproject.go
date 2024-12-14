@@ -9,13 +9,13 @@ import (
 	"sync"
 )
 
-func (c *client) GetProject(projectKey string) (*Project, error) {
+func (c *Client) GetProject(projectKey string) (*Project, error) {
 	safeName := url.PathEscape(projectKey)
 
 	url := c.baseURL + "/projects/" + safeName
 
 	resp, err := http.Get(url)
-	fmt.Println(url)
+	//fmt.Println(url)
 	if err != nil {
 		return nil, fmt.Errorf("Couldn't make the get request to %q", url)
 	}
@@ -31,16 +31,18 @@ func (c *client) GetProject(projectKey string) (*Project, error) {
 		return nil, fmt.Errorf("error unmarshaling JSON response: %v", err)
 	}
 
+	//fmt.Printf("Raw response for project %s: %s\n", projectKey, string(body))
+
 	return &project, nil
 }
 
-func (c *client) GetProjectAndAllDependencies(projectKey string) (*result, error) {
+func (c *Client) GetProjectAndAllDependencies(projectKey string) (*result, error) {
 	safeName := url.PathEscape(projectKey)
 
 	url := c.baseURL + "/projects/" + safeName
 
 	resp, err := http.Get(url)
-	fmt.Println(url)
+	//fmt.Println(url)
 	if err != nil {
 		return nil, fmt.Errorf("Couldn't make the get request to %q", url)
 	}
@@ -59,45 +61,69 @@ func (c *client) GetProjectAndAllDependencies(projectKey string) (*result, error
 	return nil, nil
 }
 
-func (c *client) GetAllProjectsFromGraph(graph *DependencyGraph) ([]*Project, error) {
+func (c *Client) GetAllProjectsFromGraph(graph *DependencyGraph) ([]*Project, error) {
 	var wg sync.WaitGroup
+
+	// Structure to hold results from goroutines
 	type ProjectResult struct {
 		Project *Project
 		Err     error
 	}
-	results := make(chan ProjectResult, len(graph.Nodes))
+
+	results := make(chan ProjectResult, len(graph.Nodes)) // Buffer size equals number of nodes
+
+	// Loop through each node in the graph
 	for _, node := range graph.Nodes {
 		wg.Add(1)
 		go func(node Node) {
 			defer wg.Done()
+
+			// Skip the "SELF" relation
 			if node.Relation == "SELF" {
 				results <- ProjectResult{Project: nil, Err: nil}
 				return
 			}
+
+			// Fetch the project
 			project, err := c.GetProject(node.VersionKey.Name)
 			if err != nil {
+				// Log the error for debugging
+				fmt.Printf("GetAllProjectsFromGraph: Error fetching project %s: %v\n", node.VersionKey.Name, err)
 				err = fmt.Errorf("failure getting project %q: %w", node.VersionKey.Name, err)
 			}
+
+			// Send result back to the channel
 			results <- ProjectResult{Project: project, Err: err}
 		}(node)
 	}
+
+	// Close results channel after all goroutines finish
 	go func() {
 		wg.Wait()
 		close(results)
 	}()
+
 	var projects []*Project
 	var errs []error
+
+	// Process results from the channel
 	for res := range results {
 		if res.Err != nil {
+			// Accumulate errors for a combined error report
 			errs = append(errs, res.Err)
 		} else if res.Project != nil {
+			// Append valid projects
 			projects = append(projects, res.Project)
 		}
 	}
+
+	// Combine errors if any occurred
 	var err error
 	if len(errs) > 0 {
+		// Format all errors into a single error
 		err = fmt.Errorf("multiple errors: %v", errs)
 	}
+
 	return projects, err
 }
 

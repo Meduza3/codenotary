@@ -1,0 +1,67 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.container {
+  display: flex;
+  width: 100%;
+}
+
+.input-section {
+  flex: 1;
+  padding: 20px;
+  border-right: 1px solid #ddd;
+}
+
+.list-section {
+  flex: 3;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.rectangle {
+  height: 100px;
+  margin: 10px 0;
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+}
+
+.scrollable-list {
+  max-height: 100%;
+}
+
+.input-box {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+.submit-button {
+  padding: 10px 20px;
+  font-size: 16px;
+}
+
+.scrollable-list {
+  max-height: 300px; /* Set a specific height */
+  overflow-y: auto; /* Enable vertical scrolling */
+  border: 1px solid #ddd; /* Optional: for better visibility */
+  padding: 10px; /* Optional: for aesthetics */
+  background-color: #f9f9f9; /* Optional: improve look */
+}
+
+.list-section {
+  width: 100%;
+  max-width: 600px; /* Optional: to constrain width */
+  margin: 0 auto; /* Center the section */
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* Space between sections */
+}
