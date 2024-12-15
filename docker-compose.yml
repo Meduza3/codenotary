@@ -1,29 +1,28 @@
-version: '3.8'
-
+version: "3.8"
 services:
   backend:
     build:
       context: .
-      dockerfile: Dockerfile.backend
-    image: meduza3/backend:latest
-    container_name: backend
+      dockerfile: Dockerfile.server
+    container_name: go-server
     ports:
       - "8080:8080"
-    restart: unless-stopped
+    networks:
+      - app-network
 
   frontend:
     build:
-      context: ./front/codenotarydeps
-      dockerfile: Dockerfile.frontend
-    image: meduza3/frontend:latest
-    container_name: frontend
+      context: ./front
+      dockerfile: Dockerfile.front
+    container_name: remix-frontend
     ports:
       - "3000:3000"
-    depends_on:
-      - backend
+    networks:
+      - app-network
     environment:
-    restart: unless-stopped
+    - API_URL=http://backend:8080
+
 
 networks:
-  default:
+  app-network:
     driver: bridge

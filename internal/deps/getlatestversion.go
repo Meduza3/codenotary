@@ -3,7 +3,6 @@ package deps
 import (
 	"codenotary/internal/models"
 	"fmt"
-	"os"
 	"regexp"
 	"strconv"
 	"strings"
@@ -14,8 +13,7 @@ func (c *Client) GetLatestVersionByProjectId(projectID string) (string, error) {
 	// If not, get it and store it for later
 	pv, err := c.GetPackage(projectID)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Failed to get package")
-		return "", err
+		return "", fmt.Errorf("Failed to GetPackage: %w", err)
 	}
 
 	defaults := make([]string, 0)

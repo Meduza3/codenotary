@@ -43,10 +43,19 @@ func HandleGetDependencies(w http.ResponseWriter, r *http.Request) {
 	fmt.Print("Fetching dependency graph...")
 	dependencyGraph, err := internal.Client.GetDependencies(projectName)
 	if err != nil {
-		http.Error(w, "Failed to fetch dependencies", http.StatusInternalServerError)
+		errorMessage := "Failed to fetch dependencies. Please check your internet connection or ensure the project exists in the database."
+		jsonError := struct {
+			Error string `json:"error"`
+		}{
+			Error: errorMessage,
+		}
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(jsonError)
 		fmt.Printf("Error fetching dependency graph: %v\n", err)
 		return
 	}
+
 	// Retrieve all related projects from the dependency graph
 	dependenciesProjects, skipped, err := internal.Client.GetAllProjectsFromGraph(dependencyGraph)
 	if err != nil {

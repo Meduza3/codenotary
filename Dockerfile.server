@@ -1,0 +1,14 @@
+# Stage 1: Build
+FROM golang:1.23 AS builder
+WORKDIR /server
+COPY . .
+RUN GOOS=linux go build -a -installsuffix cgo -o server .
+RUN ls -lh /server
+
+# Stage 2: Run  
+FROM ubuntu:22.04
+WORKDIR /server
+COPY --from=builder /server .
+RUN ls -lh /server
+EXPOSE 8080 
+ENTRYPOINT ["./server"]
