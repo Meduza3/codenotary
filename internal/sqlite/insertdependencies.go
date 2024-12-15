@@ -13,39 +13,48 @@ func InsertDependencyGraph(db *sql.DB, projectID string, graph *models.Dependenc
 		return fmt.Errorf("nil graph")
 	}
 
-	
 	for idx, node := range graph.Nodes {
-		errors := strings.Join(node.Errors, ";") 
+		errors := strings.Join(node.Errors, ";")
 
-		query := `
-			INSERT INTO dependency_nodes (project_id, graph_id, node_index, system, name, version, bundled, relation, errors)
-			VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
-		args := []interface{}{
-			projectID, 
-			projectID, idx, node.VersionKey.System, node.VersionKey.Name, node.VersionKey.Version,
-			node.Bundled, node.Relation, errors,
+		// Calculate ossf_score for the dependency
+		ossfScore, err := CalculateOpenSSF(db, node.VersionKey.Name)
+		if err != nil {
+			log.Printf("Error calculating OpenSSF score for %s: %v. Setting ossf_score to -1.", node.VersionKey.Name, err)
+			ossfScore = -1
 		}
 
-		
+		query := `
+            INSERT INTO dependency_nodes (
+                project_id, graph_id, node_index, system, name, version, bundled, relation, errors, ossf_score
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+		args := []interface{}{
+			projectID,
+			projectID,
+			idx,
+			node.VersionKey.System,
+			node.VersionKey.Name,
+			node.VersionKey.Version,
+			node.Bundled,
+			node.Relation,
+			errors,
+			ossfScore,
+		}
 
-		_, err := db.Exec(query, args...)
+		_, err = db.Exec(query, args...)
 		if err != nil {
 			log.Printf("Error inserting node at index %d: %v", idx, err)
 			return fmt.Errorf("failed to insert node at index %d: %v", idx, err)
 		}
 	}
 
-	
 	for _, edge := range graph.Edges {
 		query := `
 			INSERT INTO dependency_edges (project_id, graph_id, from_node_index, to_node_index, requirement)
 			VALUES (?, ?, ?, ?, ?)`
 		args := []interface{}{
-			projectID, 
+			projectID,
 			projectID, edge.FromNode, edge.ToNode, edge.Requirement,
 		}
-
-		
 
 		_, err := db.Exec(query, args...)
 		if err != nil {

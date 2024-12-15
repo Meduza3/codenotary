@@ -9,7 +9,7 @@ type Client struct {
 
 func NewClient(db *sql.DB) *Client {
 	return &Client{
-		baseURL: "https:
+		baseURL: "https://api.deps.dev/v3",
 		db:      db,
 	}
 }
