@@ -119,8 +119,6 @@ export default function Index() {
   const isLoading =
     fetcher.state === "loading" || fetcher.state === "submitting";
 
-  // Update previousProject when a new project is successfully fetched
-  // Update historyStack when a new project is successfully fetched
   useEffect(() => {
     if (fetcher.state === "idle" && fetcher.data?.project_name) {
       setHistoryStack((prevStack) => {
@@ -132,19 +130,18 @@ export default function Index() {
     }
   }, [fetcher.state, fetcher.data?.project_name]);
 
-  // Function to handle back button click
   const handleBack = () => {
     setHistoryStack((prevStack) => {
       if (prevStack.length > 1) {
         const newStack = [...prevStack];
-        newStack.pop(); // Remove the current project
-        const previousProject = newStack[newStack.length - 1]; // Get the previous project
+        newStack.pop();
+        const previousProject = newStack[newStack.length - 1];
         const formData = new FormData();
         formData.append("projectName", previousProject);
         fetcher.submit(formData, { method: "post" });
-        return newStack; // Update the stack
+        return newStack;
       }
-      return prevStack; // No change if there's no history to go back to
+      return prevStack;
     });
   };
 
@@ -301,13 +298,11 @@ export default function Index() {
           {Object.keys(mainScores).length > 0 ? (
             <div className="main-scores-list">
               {Object.entries(mainScores).map(([key, value]) => {
-                // Generate abbreviation from the key
                 const abbreviation = key
                   .split("-")
                   .map((word) => word.charAt(0))
                   .join("");
 
-                // Get the full name from scoreNames mapping
                 const fullName = scoreNames[abbreviation] || key;
 
                 return (
