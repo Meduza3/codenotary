@@ -8,9 +8,9 @@ import (
 	"strings"
 )
 
-// Returns the latest default version, or the latest version in case no defaults are set.
+
 func (c *Client) GetLatestVersionByProjectId(projectID string) (string, error) {
-	// If not, get it and store it for later
+	
 	pv, err := c.GetPackage(projectID)
 	if err != nil {
 		return "", fmt.Errorf("Failed to GetPackage: %w", err)
@@ -40,17 +40,17 @@ func latestSemVer(versions []models.Version) (string, error) {
 		stripped := filterNumbersAndDots(v.VersionKey.Name)
 		parts := strings.Split(stripped, ".")
 		if len(parts) != 3 {
-			continue // Skip invalid versions
+			continue 
 		}
 
 		major, err1 := strconv.Atoi(parts[0])
 		minor, err2 := strconv.Atoi(parts[1])
 		patch, err3 := strconv.Atoi(parts[2])
 		if err1 != nil || err2 != nil || err3 != nil {
-			continue // Skip versions that cannot be parsed
+			continue 
 		}
 
-		// Compare semantic version components
+		
 		if major > max1 || (major == max1 && minor > max2) || (major == max1 && minor == max2 && patch > max3) {
 			max = v.VersionKey.Name
 			max1, max2, max3 = major, minor, patch
@@ -65,8 +65,8 @@ func latestSemVer(versions []models.Version) (string, error) {
 }
 
 func filterNumbersAndDots(input string) string {
-	// Use a regular expression to allow only numbers and dots
+	
 	re := regexp.MustCompile(`[^\d.]`)
-	// Replace all non-matching characters with an empty string
+	
 	return re.ReplaceAllString(input, "")
 }

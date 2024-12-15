@@ -7,10 +7,10 @@ import (
 	"strings"
 )
 
-// GetProject retrieves a Project from the database based on the projectKey.
-// It returns nil if the project is not found.
+
+
 func GetProject(db *sql.DB, projectKey string) (*models.Project, error) {
-	// Retrieve the project details
+	
 	var p models.Project
 	var scorecardDate, repoName, repoCommit, scorecardVersion, scorecardCommit string
 	var overallScore float64
@@ -41,7 +41,7 @@ func GetProject(db *sql.DB, projectKey string) (*models.Project, error) {
 	)
 
 	if err == sql.ErrNoRows {
-		return nil, nil // Project not found
+		return nil, nil 
 	} else if err != nil {
 		return nil, fmt.Errorf("error querying project: %v", err)
 	}
@@ -53,7 +53,7 @@ func GetProject(db *sql.DB, projectKey string) (*models.Project, error) {
 	p.Scorecard.Scorecard.Commit = scorecardCommit
 	p.Scorecard.OverallScore = overallScore
 
-	// Retrieve associated scorecard checks
+	
 	checksQuery := `
 		SELECT 
 			name, short_description, url, score, reason, details
@@ -91,4 +91,18 @@ func GetProject(db *sql.DB, projectKey string) (*models.Project, error) {
 	}
 
 	return &p, nil
+}
+
+func GetOpenSSFScore(db *sql.DB, depName string) (float64, error) {
+	query := `SELECT scorecard_overall_score FROM project WHERE id = ? LIMIT 1`
+	var score float64
+	err := db.QueryRow(query, depName).Scan(&score)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			
+			return 0.0, nil
+		}
+		return 0.0, fmt.Errorf("failed to retrieve OpenSSF score: %v", err)
+	}
+	return score, nil
 }

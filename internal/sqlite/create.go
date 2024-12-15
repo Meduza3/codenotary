@@ -6,7 +6,7 @@ import (
 )
 
 func Create(db *sql.DB) error {
-	// Create the project table
+	
 	projectTable := `
 			CREATE TABLE IF NOT EXISTS project (
 					id TEXT PRIMARY KEY,
@@ -29,7 +29,7 @@ func Create(db *sql.DB) error {
 		return fmt.Errorf("failed to create project table: %v", err)
 	}
 
-	// Create a table for scorecard checks
+	
 	checksTable := `
 			CREATE TABLE IF NOT EXISTS scorecard_checks (
 					project_id TEXT,
@@ -83,7 +83,9 @@ func Create(db *sql.DB) error {
   version TEXT,
   bundled BOOLEAN,
   relation TEXT,              -- SELF, DIRECT, INDIRECT
-  errors TEXT                 -- could store as JSON or newline-delimited
+  errors TEXT,                 -- could store as JSON or newline-delimited
+	ossf_score REAL, -- New field for OpenSSF score
+	UNIQUE(project_id, graph_id, node_index)
 	);
 	`
 

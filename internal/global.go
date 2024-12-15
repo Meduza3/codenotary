@@ -5,7 +5,7 @@ import (
 	"database/sql"
 )
 
-const Database string = "codenotary.db"
+const Database string = "codenotarydatabase.db"
 
 var Db *sql.DB
 var Client *deps.Client

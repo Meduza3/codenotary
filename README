@@ -1,2 +1,21 @@
 # CodeNotary Technical challenge
 
+# Setup
+first run ```docker-compose up --build``` to build
+
+then ```docker-compose up``` to run it another time
+
+Visit the frontend at ```localhost:3000/index```
+You can query the api at ```localhost:8080```
+
+Supported features:
+  - First query local SQLite, then if not found ask the deps API
+  - Bar graph of the count of scores
+  - Click on any dependency in the list to search among its dependencies
+  - A back button to go to the previous project
+  - Fast loading time due to asynchronous goroutines
+
+# SQLite schema
+
+# API
+

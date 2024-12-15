@@ -7,10 +7,10 @@ import (
 	"strings"
 )
 
-// GetDependencyGraph retrieves the DependencyGraph for a given projectID from the database.
-// It returns nil if the graph is not found.
+
+
 func GetDependencyGraph(db *sql.DB, projectID string) (*models.DependencyGraph, error) {
-	// Retrieve nodes
+	
 	nodeRows, err := db.Query(`
 			SELECT node_index, system, name, version, bundled, relation, errors
 			FROM dependency_nodes
@@ -55,12 +55,12 @@ func GetDependencyGraph(db *sql.DB, projectID string) (*models.DependencyGraph, 
 		return nil, fmt.Errorf("error iterating dependency_nodes rows: %v", err)
 	}
 
-	// If no nodes found, assume the graph doesn't exist
+	
 	if len(nodes) == 0 {
 		return nil, nil
 	}
 
-	// Retrieve edges
+	
 	edgeRows, err := db.Query(`
 			SELECT from_node_index, to_node_index, requirement
 			FROM dependency_edges

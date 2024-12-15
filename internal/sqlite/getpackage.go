@@ -6,10 +6,10 @@ import (
 	"fmt"
 )
 
-// GetPackageVersions retrieves the PackageVersions for a given system and name from the database.
-// It returns nil if the package is not found.
+
+
 func GetPackageVersions(db *sql.DB, name string) (*models.PackageVersions, error) {
-	// Retrieve package
+	
 	system := "GO"
 	var pkgName string
 	err := db.QueryRow(`
@@ -17,12 +17,12 @@ func GetPackageVersions(db *sql.DB, name string) (*models.PackageVersions, error
 		WHERE system = ? AND name = ?`,
 		system, name).Scan(&pkgName)
 	if err == sql.ErrNoRows {
-		return nil, nil // Package not found
+		return nil, nil 
 	} else if err != nil {
 		return nil, fmt.Errorf("error querying packages: %v", err)
 	}
 
-	// Retrieve versions
+	
 	rows, err := db.Query(`
 		SELECT version, is_default FROM package_versions
 		WHERE system = ? AND name = ?`,
@@ -54,7 +54,7 @@ func GetPackageVersions(db *sql.DB, name string) (*models.PackageVersions, error
 		return nil, fmt.Errorf("error iterating package_versions rows: %v", err)
 	}
 
-	// If no versions found, treat as package not found
+	
 	if len(versions) == 0 {
 		return nil, nil
 	}

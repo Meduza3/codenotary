@@ -6,9 +6,9 @@ import (
 	"fmt"
 )
 
-// Insert or update package and its versions
+
 func StorePackageVersions(db *sql.DB, pv *models.PackageVersions) error {
-	// Insert or ignore into packages table
+	
 	_, err := db.Exec(`
 			INSERT OR IGNORE INTO packages (system, name) VALUES (?, ?)`,
 		pv.PackageKey.System, pv.PackageKey.Name)
@@ -16,7 +16,7 @@ func StorePackageVersions(db *sql.DB, pv *models.PackageVersions) error {
 		return fmt.Errorf("failed to insert package: %v", err)
 	}
 
-	// For each version, insert or replace
+	
 	for _, v := range pv.Versions {
 		isDefault := 0
 		if v.IsDefault {
@@ -33,7 +33,7 @@ func StorePackageVersions(db *sql.DB, pv *models.PackageVersions) error {
 	return nil
 }
 
-// Example function to get the latest (default) version of a project
+
 func GetLatestVersion(db *sql.DB, system, name string) (string, error) {
 	var version string
 	err := db.QueryRow(`

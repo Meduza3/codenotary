@@ -11,7 +11,7 @@ import (
 	"net/url"
 )
 
-// First checks the database for a dependency graph, then fetches from api
+
 func (c *Client) GetDependencies(name string) (*models.DependencyGraph, error) {
 	graph, err := sqlite.GetDependencyGraph(c.db, name)
 	if err != nil {
@@ -31,9 +31,9 @@ func (c *Client) GetDependencies(name string) (*models.DependencyGraph, error) {
 	}
 	url := fmt.Sprintf("%s/systems/GO/packages/%s/versions/%s:dependencies", c.baseURL, safeName, latestVersion)
 	resp, err := http.Get(url)
-	//fmt.Println(url)
+	
 	if err != nil {
-		return nil, fmt.Errorf("Couldn't make the get request to %q", url)
+		return nil, fmt.Errorf("Couldn't make the get request to %q: %w", url, err)
 	}
 
 	body, err := io.ReadAll(resp.Body)
@@ -48,7 +48,7 @@ func (c *Client) GetDependencies(name string) (*models.DependencyGraph, error) {
 
 	err = sqlite.InsertDependencyGraph(c.db, name, &dependencyGraph)
 	if err != nil {
-		//handle error
+		
 	}
 	return &dependencyGraph, nil
 }

@@ -2,11 +2,11 @@ package models
 
 type Version struct {
 	VersionKey VersionKey `json:"versionKey"`
-	IsDefault  bool       `json:"isDefault"` // Indicates if it's default version
+	IsDefault  bool       `json:"isDefault"` 
 }
 
 type PackageKey struct {
-	System string `json:"system"` // (e.g. GO)
+	System string `json:"system"` 
 	Name   string `json:"name"`
 }
 
@@ -17,6 +17,6 @@ type VersionKey struct {
 }
 
 type PackageVersions struct {
-	PackageKey PackageKey `json:"packageKey"` // Unique identifier for the package
-	Versions   []Version  `json:"versions"`   // All available versions
+	PackageKey PackageKey `json:"packageKey"` 
+	Versions   []Version  `json:"versions"`   
 }

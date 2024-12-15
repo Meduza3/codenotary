@@ -22,7 +22,7 @@ func (c *Client) GetPackage(name string) (*models.PackageVersions, error) {
 	fmt.Println(url)
 	resp, err := http.Get(url)
 	if err != nil {
-		return nil, fmt.Errorf("Couldn't make the get request to %q", url)
+		return nil, fmt.Errorf("Couldn't make the get request to %q: %w", url, err)
 	}
 
 	body, err := io.ReadAll(resp.Body)

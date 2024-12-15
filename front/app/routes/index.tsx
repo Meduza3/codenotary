@@ -1,4 +1,4 @@
-import React from "react"; // Explicit React import
+import React, { useState, useEffect } from "react"; // Explicit React import
 import { json } from "@remix-run/node";
 import { useFetcher } from "@remix-run/react";
 import type { ActionFunction, LoaderFunction } from "@remix-run/node";
@@ -13,7 +13,14 @@ import {
   Legend,
 } from "chart.js";
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 type Dependency = {
   id: string;
@@ -29,10 +36,9 @@ type FetcherData = {
   error?: string;
 };
 
-
 export const loader: LoaderFunction = async () => {
   return json({
-    message: "Enter a project name to fetch dependencies",
+    message: "No dependencies. Hire Marcin :)",
     project_name: "",
     dependencies: [],
   });
@@ -43,7 +49,11 @@ export const action: ActionFunction = async ({ request }) => {
   const projectName = formData.get("projectName");
 
   if (!projectName) {
-    return json({ message: "Invalid input", project_name: "", dependencies: [] });
+    return json({
+      message: "Invalid input",
+      project_name: "",
+      dependencies: [],
+    });
   }
 
   const encodedName = encodeURIComponent(projectName as string);
@@ -53,7 +63,12 @@ export const action: ActionFunction = async ({ request }) => {
   });
   if (!response.ok) {
     return json(
-      { error: "Failed to fetch data from the server: You haven't searched for this project before so it's not saved in the database.", project_name: projectName, dependencies: [] },
+      {
+        error:
+          "Failed to fetch data from the server: You haven't searched for this project before so it's not saved in the database.",
+        project_name: projectName,
+        dependencies: [],
+      },
       { status: 500 }
     );
   }
@@ -61,7 +76,6 @@ export const action: ActionFunction = async ({ request }) => {
   const data = await response.json();
   return json({ ...data, project_name: projectName });
 };
-
 
 const getRoundedCounts = (data: number[]) => {
   const counts: Record<number, number> = {};
@@ -80,8 +94,8 @@ const getRoundedCounts = (data: number[]) => {
   }));
 };
 
-
 export default function Index() {
+  const [historyStack, setHistoryStack] = useState<string[]>([]); // History stack
   const scoreNames: Record<string, string> = {
     BA: "Binary-Artifacts",
     BP: "Branch-Protection",
@@ -102,7 +116,37 @@ export default function Index() {
   const fetcher = useFetcher<FetcherData>();
   const dependencies = fetcher.data?.dependencies || [];
   const projectName = fetcher.data?.project_name || "";
-  const isLoading = fetcher.state === "loading" || fetcher.state === "submitting";
+  const isLoading =
+    fetcher.state === "loading" || fetcher.state === "submitting";
+
+  // Update previousProject when a new project is successfully fetched
+  // Update historyStack when a new project is successfully fetched
+  useEffect(() => {
+    if (fetcher.state === "idle" && fetcher.data?.project_name) {
+      setHistoryStack((prevStack) => {
+        if (prevStack[prevStack.length - 1] !== fetcher.data.project_name) {
+          return [...prevStack, fetcher.data.project_name];
+        }
+        return prevStack;
+      });
+    }
+  }, [fetcher.state, fetcher.data?.project_name]);
+
+  // Function to handle back button click
+  const handleBack = () => {
+    setHistoryStack((prevStack) => {
+      if (prevStack.length > 1) {
+        const newStack = [...prevStack];
+        newStack.pop(); // Remove the current project
+        const previousProject = newStack[newStack.length - 1]; // Get the previous project
+        const formData = new FormData();
+        formData.append("projectName", previousProject);
+        fetcher.submit(formData, { method: "post" });
+        return newStack; // Update the stack
+      }
+      return prevStack; // No change if there's no history to go back to
+    });
+  };
 
   const scores = dependencies.map((dep) => dep.score);
   const roundedData = getRoundedCounts(scores);
@@ -121,7 +165,6 @@ export default function Index() {
     ],
   };
 
-
   return (
     <div className="container">
       <div className="input-section">
@@ -136,12 +179,32 @@ export default function Index() {
           <button type="submit" className="submit-button" disabled={isLoading}>
             {isLoading ? "Loading..." : "Send"}
           </button>
+          <button
+            type="button"
+            className="back-button"
+            onClick={handleBack}
+            disabled={historyStack.length <= 1 || isLoading}
+            style={{
+              marginLeft: "10px",
+              padding: "6px 12px",
+              backgroundColor: historyStack.length > 1 ? "#6c757d" : "#ccc",
+              color: "#fff",
+              border: "none",
+              borderRadius: "4px",
+              cursor: historyStack.length > 1 ? "pointer" : "not-allowed",
+            }}
+          >
+            Back
+          </button>
         </fetcher.Form>
       </div>
 
       <div className="main-section">
         <div className="list-section">
-          <h1>Dependencies for: {isLoading ? "Loading..." : projectName || "No project selected"}</h1>
+          <h1>
+            Dependencies for:{" "}
+            {isLoading ? "Loading..." : projectName || "No project selected"}
+          </h1>
           <div className="scrollable-list">
             {isLoading ? (
               <p>Loading dependencies...</p>
@@ -155,17 +218,18 @@ export default function Index() {
                 } else {
                   scoreClass = "rectangle-low";
                 }
-              
+
                 const cs = item.check_scores || {};
-                const formatScore = (val: number) => (val === -1 ? "?" : val.toString());
-              
+                const formatScore = (val: number) =>
+                  val === -1 ? "?" : val.toString();
+
                 return (
                   <div
                     className={`rectangle ${scoreClass}`}
                     key={index}
                     onClick={() => {
                       if (item.score === -1 || dependencies.length === 0) {
-                        alert("No known dependencies for this item.");
+                        alert("Project not found in deps.");
                       } else {
                         const formData = new FormData();
                         formData.append("projectName", item.id);
@@ -173,77 +237,93 @@ export default function Index() {
                       }
                     }}
                   >
-                    <p><strong>ID:</strong> {item.id}</p>
-                    <p><strong>Score:</strong> {item.score === -1 ? "???" : item.score.toFixed(1)}</p>
-              
+                    <p>
+                      <strong>ID:</strong> {item.id}
+                    </p>
+                    <p>
+                      <strong>Score:</strong>{" "}
+                      {item.score === -1 ? "???" : item.score.toFixed(1)}
+                    </p>
+
                     {item.score !== -1 && item.check_scores && (
-                    <div className="check-scores">
-                      <div className="check-scores-list">
-                      {Object.entries(cs).map(([key, value]) => {
-                        // Find the abbreviation by matching the full key name
-                        const abbreviation = Object.keys(scoreNames).find(
-                          (abbr) => scoreNames[abbr] === key
-                        );
+                      <div className="check-scores">
+                        <div className="check-scores-list">
+                          {Object.entries(cs).map(([key, value]) => {
+                            const abbreviation = Object.keys(scoreNames).find(
+                              (abbr) => scoreNames[abbr] === key
+                            );
 
-                        if (!abbreviation) return null; // Skip if no abbreviation found
+                            if (!abbreviation) return null;
 
-                        return (
-                          <span key={key} className="score-item">
-                            <span className="abbr">{abbreviation}</span>
-                            <span className="full">{scoreNames[abbreviation]}</span>: {formatScore(value)}
-                          </span>
-                        );
-                      })}
-                    </div>
-                    </div>
-                  )}
-
+                            return (
+                              <span key={key} className="score-item">
+                                <span className="abbr">{abbreviation}</span>
+                                <span className="full">
+                                  {scoreNames[abbreviation]}
+                                </span>
+                                : {formatScore(value)}
+                              </span>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 );
               })
-              
             ) : (
-              <p>{fetcher.data?.error || "Enter a project name to fetch dependencies"}</p>
+              // Show a message when there are no dependencies
+              <p>
+                {fetcher.data?.message ||
+                  "No dependencies found for this project."}
+              </p>
             )}
           </div>
         </div>
 
-        <div className="graph-section">
-          <h1>Dependency Score Graph</h1>
-          <div className="graph-placeholder">
-            {dependencies.length > 0 ? (
-              <Bar data={chartData} options={{ responsive: true, plugins: { legend: { position: "top" } } }} />
-            ) : (
-              <p>No graph data to display.</p>
-            )}
-          </div>
-          <div className="main-scores-section">
-            <h2>{projectName} Scores</h2>
-            {Object.keys(mainScores).length > 0 ? (
-              <div className="main-scores-list">
-                {Object.entries(mainScores).map(([key, value]) => {
-                  // Generate abbreviation from the key
-                  const abbreviation = key
-                    .split('-')
-                    .map((word) => word.charAt(0))
-                    .join('');
-                  
-                  // Get the full name from scoreNames mapping
-                  const fullName = scoreNames[abbreviation] || key;
-                  
-                  return (
-                    <span key={key} className="score-item">
-                      <span className="abbr">{abbreviation}</span>
-                      <span className="full">{fullName}</span>: {value === -1 ? '?' : value}
-                    </span>
-                  );
-                })}
-              </div>
-            ) : (
-              <p>No project selected yet.</p>
-            )}
-          </div>
+      <div className="graph-section">
+        <h1>Dependency Score Graph</h1>
+        <div className="graph-placeholder">
+          {dependencies.length > 0 ? (
+            <Bar
+              data={chartData}
+              options={{
+                responsive: true,
+                plugins: { legend: { position: "top" } },
+              }}
+            />
+          ) : (
+            <p>No graph data to display.</p>
+          )}
         </div>
+        <div className="main-scores-section">
+          <h2>{projectName} Scores</h2>
+          {Object.keys(mainScores).length > 0 ? (
+            <div className="main-scores-list">
+              {Object.entries(mainScores).map(([key, value]) => {
+                // Generate abbreviation from the key
+                const abbreviation = key
+                  .split("-")
+                  .map((word) => word.charAt(0))
+                  .join("");
+
+                // Get the full name from scoreNames mapping
+                const fullName = scoreNames[abbreviation] || key;
+
+                return (
+                  <span key={key} className="score-item">
+                    <span className="abbr">{abbreviation}</span>
+                    <span className="full">{fullName}</span>:{" "}
+                    {value === -1 ? "?" : value}
+                  </span>
+                );
+              })}
+            </div>
+          ) : (
+            <p>No project selected yet.</p>
+          )}
+        </div>
+      </div>
       </div>
     </div>
   );

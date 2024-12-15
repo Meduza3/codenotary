@@ -6,9 +6,9 @@ RUN GOOS=linux go build -a -installsuffix cgo -o server .
 RUN ls -lh /server
 
 # Stage 2: Run  
-FROM ubuntu:22.04
+FROM golang:1.23-bullseye
 WORKDIR /server
-COPY --from=builder /server .
-RUN ls -lh /server
-EXPOSE 8080 
+COPY . .
+RUN go build -o server .
+EXPOSE 8080
 ENTRYPOINT ["./server"]

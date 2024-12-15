@@ -17,10 +17,10 @@ func HandleGetDependencies(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Extract the project name by trimming the prefix
+	
 	encodedProjectName := strings.TrimPrefix(r.URL.Path, "/dependency/")
 
-	// Decode the URL-encoded project name
+	
 	projectName, err := url.QueryUnescape(encodedProjectName)
 	if err != nil || projectName == "" {
 		http.Error(w, "Invalid or missing project name", http.StatusBadRequest)
@@ -29,17 +29,17 @@ func HandleGetDependencies(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Printf("Received GET /dependency for project: %s\n", projectName)
 
-	//store it in DB
+	
 	project, err := internal.Client.GetProject(projectName)
 	if err != nil {
-		//handle error!
+		
 	}
 	err = sqlite.InsertProject(internal.Db, project)
 	if err != nil {
-		//handle error!
+		
 	}
 
-	// Retrieve the dependency graph
+	
 	fmt.Print("Fetching dependency graph...")
 	dependencyGraph, err := internal.Client.GetDependencies(projectName)
 	if err != nil {
@@ -56,7 +56,7 @@ func HandleGetDependencies(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Retrieve all related projects from the dependency graph
+	
 	dependenciesProjects, skipped, err := internal.Client.GetAllProjectsFromGraph(dependencyGraph)
 	if err != nil {
 		fmt.Printf("Error fetching related projects: %v\n", err)
@@ -67,7 +67,7 @@ func HandleGetDependencies(w http.ResponseWriter, r *http.Request) {
 		dependenciesProjects = append(dependenciesProjects, &proj)
 	}
 
-	// Prepare the structured JSON response
+	
 	type Dependency struct {
 		ID          string         `json:"id"`
 		Score       float64        `json:"score"`
@@ -76,7 +76,7 @@ func HandleGetDependencies(w http.ResponseWriter, r *http.Request) {
 
 	mainScores, err := sqlite.GetScoresByProjectID(internal.Db, projectName)
 	if err != nil {
-		//handle error!
+		
 	}
 	response := struct {
 		MainScores   map[string]int `json:"main_scores"`
@@ -90,7 +90,7 @@ func HandleGetDependencies(w http.ResponseWriter, r *http.Request) {
 		Dependencies: []Dependency{},
 	}
 
-	// Populate dependencies
+	
 	fmt.Println("Populating dependencies...")
 	sqlite.InsertProjects(internal.Db, dependenciesProjects)
 	for _, project := range dependenciesProjects {
@@ -103,7 +103,7 @@ func HandleGetDependencies(w http.ResponseWriter, r *http.Request) {
 			fmt.Printf("Error fetching scores for project %s: %v\n", project.ProjectKey.ID, err)
 			checkScores = nil
 		}
-		//fmt.Printf("Project: ID=%s, Score=%f\n", project.ProjectKey.ID, project.Scorecard.OverallScore)
+		
 		response.Dependencies = append(response.Dependencies, Dependency{
 			ID:          project.ProjectKey.ID,
 			Score:       project.Scorecard.OverallScore,
@@ -111,10 +111,10 @@ func HandleGetDependencies(w http.ResponseWriter, r *http.Request) {
 		})
 	}
 
-	// Print the JSON response to the console
+	
 	fmt.Printf("Generated JSON Response: %s\n", toJSONString(response))
 
-	// Respond with the JSON structure
+	
 	w.Header().Set("Content-Type", "application/json")
 	err = json.NewEncoder(w).Encode(response)
 	if err != nil {
@@ -123,7 +123,7 @@ func HandleGetDependencies(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// Helper function to convert any struct to a JSON string
+
 func toJSONString(v interface{}) string {
 	bytes, err := json.MarshalIndent(v, "", "  ")
 	if err != nil {
@@ -133,8 +133,8 @@ func toJSONString(v interface{}) string {
 }
 
 func emptyProjectFromName(name string) models.Project {
-	// Create the project key, ID, pathname
-	// and init an empty project
+	
+	
 	project := models.Project{
 		ProjectKey: models.ProjectKey{
 			ID: name,
@@ -144,6 +144,6 @@ func emptyProjectFromName(name string) models.Project {
 		},
 	}
 
-	// Return empty project
+	
 	return project
 }
