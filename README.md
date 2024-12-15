@@ -17,63 +17,72 @@ Supported features:
 
 # SQLite schema
 
-project
-- id : unique project ID (primary key)
-- open_issues_count : open issues count
-- stars_count : star count
-- forks_count : fork count
-- license : project license
-- description : project summary
-- homepage : project homepage URL
-- scorecard_date : scorecard date
-- scorecard_repo_name : repo name in scorecard
-- scorecard_repo_commit : repo commit hash
-- scorecard_version : scorecard version
-- scorecard_commit : scorecard tool commit
-- scorecard_overall_score : overall security score
+### project
+id TEXT : Unique project identifier (Primary Key)  
+open_issues_count INTEGER : Number of open issues  
+stars_count INTEGER : Star count  
+forks_count INTEGER : Fork count  
+license TEXT : Project license type  
+description TEXT : Brief project description  
+homepage TEXT : Project homepage URL  
+scorecard_date TEXT : Date of the scorecard  
+scorecard_repo_name TEXT : Repository name on the scorecard  
+scorecard_repo_commit TEXT : Repository commit hash  
+scorecard_version TEXT : Scorecard tool version  
+scorecard_commit TEXT : Commit hash of the scorecard tool  
+scorecard_overall_score REAL : Overall security score  
 
-scorecard_checks
-- project_id : related project ID (foreign key to project.id)
-- name : check name
-- short_description : check summary
-- url : check details URL
-- score : check score
-- reason : check reasoning
-- details : extra details
+### scorecard_checks
+project_id TEXT : Related project ID (Foreign Key to `project.id`)  
+name TEXT : Name of the scorecard check  
+short_description TEXT : Summary of the check  
+url TEXT : URL for additional details  
+score REAL : Check score  
+reason TEXT : Reasoning for the score  
+details TEXT : Additional details  
 
-packages
-- id : unique package ID (primary key)
-- name : package name
-- version : current version
-- description : package summary
-- license : package license
+### packages
+system TEXT : Package ecosystem (e.g., npm, pip)  
+name TEXT : Package name  
 
-package_versions
-- package_id : related package ID (foreign key to packages.id)
-- version : version number (primary key with package_id)
-- release_date : release date
+### package_versions
+system TEXT : Related ecosystem (Foreign Key to `packages.system`)  
+name TEXT : Related package name (Foreign Key to `packages.name`)  
+version TEXT : Package version  
+is_default INTEGER : Whether this version is the default (1 for true, 0 for false)  
 
-dependency_nodes
-- id : unique node ID (primary key)
-- package_id : related package ID (foreign key to packages.id)
-- version : package version
+### dependency_nodes
+id INTEGER : Unique node identifier (Primary Key)  
+project_id TEXT : Associated project (Foreign Key to `project.id`)  
+graph_id TEXT : Identifier for the dependency graph  
+node_index INTEGER : Node's index within the graph  
+system TEXT : Package ecosystem  
+name TEXT : Package name  
+version TEXT : Package version  
+bundled BOOLEAN : Whether the dependency is bundled  
+relation TEXT : Dependency type (`SELF`, `DIRECT`, `INDIRECT`)  
+errors TEXT : Errors encountered (stored as JSON or delimited text)  
+ossf_score REAL : OpenSSF security score  
 
-dependency_edges
-- source_id : source node ID (foreign key to dependency_nodes.id)
-- target_id : target node ID (foreign key to dependency_nodes.id)
+### dependency_edges
+id INTEGER : Unique edge identifier (Primary Key)  
+project_id TEXT : Associated project (Foreign Key to `project.id`)  
+graph_id TEXT : Identifier for the dependency graph  
+from_node_index INTEGER : Index of the source node  
+to_node_index INTEGER : Index of the target node  
+requirement TEXT : Dependency requirement (e.g., version constraints)  
 
 
 # API
 
-API
-
 Supported Endpoints:
-* Add or Update Dependency
+
+Add or Update Dependency
 - POST /dependency/add
 - Add or update a dependency for a project.
 
 - Example request:
-{
+```json{
   "project_name": "example-project",
   "dependency": {
     "versionKey": {
@@ -86,12 +95,12 @@ Supported Endpoints:
     "errors": []
   }
 }
-
-* Get Specific Dependency
+```
+Get Specific Dependency
 - GET /dependency/get/{projectName}/{dependencyName}
 - Retrieve details of a specific dependency.
 - Example response:
-{
+```json{
   "versionKey": {
     "system": "GO",
     "name": "example-dependency",
@@ -102,16 +111,16 @@ Supported Endpoints:
   "errors": [],
   "ossf_score": 8.5
 }
-
-* Delete Dependency
+```
+Delete Dependency
 - DELETE /dependency/delete/{projectName}/{dependencyName}
 - Remove a dependency from a project.
 
-* List Dependencies
+List Dependencies
 - GET /dependencies?name=example&min_score=7.0
 - List dependencies with optional filters for name and score.
 - Example response:
-[
+```json[
   {
     "versionKey": {
       "system": "GO",
@@ -124,13 +133,13 @@ Supported Endpoints:
     "ossf_score": 8.5
   }
 ]
+```
 
 Retrieve Project Dependencies
-GET /dependency/{projectName}
-Get a project's dependency graph.
-Example response:
-
-{
+- GET /dependency/{projectName}
+- Get a project's dependency graph.
+- Example response:
+```json{
   "project_name": "example-project",
   "dependencies": [
     {
@@ -139,3 +148,4 @@ Example response:
     }
   ]
 }
+```
